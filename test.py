@@ -59,25 +59,49 @@ def calculate_part_boundingbox(centerPart,leftPart,rightPart,widthscale,heightsc
     return subjectWidth, subjectHeight, top_left
 
 
+def filter_query():
+    # Asks Filter type and image name
+    if typeVal == 1:
+        print("Full Face Filter Loading")
+    elif typeVal == 2:
+        print("Center Face Filter Loading")
+    elif typeVal == 3:
+        print("Lower Face Filter Loading")
+    elif typeVal == 4:
+        print("Outer Face Filter Loading")
+    else:
+        print("Please Select One of the Options")
+        exit(10)
+
+    imageName = input("\nEnter Filter Image Name\n")
+    return imageName
+
+
+def read_image(imageName):
+    # Prepares select image
+    imageFile = cv2.imread(imageName)
+    print("Images Loaded")
+    return imageFile
+
+
 def full_face():
-    return calculate_part_boundingbox(31,2,16,1.7,.77)
+    return calculate_part_boundingbox(30, 0, 16, 1.2, 1.3)
 
 
 def center_face():
-    return calculate_part_boundingbox(30,31,35,1.7,.77)
+    return calculate_part_boundingbox(30, 31, 35, 1.7, .77)
 
 
 def lower_face():
-    return calculate_part_boundingbox(63,4,14,1.7,.77)
+    return calculate_part_boundingbox(51, 3, 13, 1.1, 1)
 
 
 def outer_face():
-    return calculate_part_boundingbox(31, 2, 16, 1.7, .77)
+    return calculate_part_boundingbox(30, 0, 16, 1.2, 1.3)
 
 
 # Preset Values
 rotationValue = 0
-rotationChange = 0
 
 # Asks Filter type and image name
 print("\nSelect the Filter Type\n"
@@ -87,19 +111,7 @@ print("\nSelect the Filter Type\n"
       "4: Outer Face\n")
 typeVal = input("Select Corresponding Number:\n")
 typeVal = int(typeVal)
-if typeVal == 1:
-    print("Full Face Filter Loading")
-elif typeVal == 2:
-    print("Center Face Filter Loading")
-elif typeVal == 3:
-    print("Lower Face Filter Loading")
-elif typeVal == 4:
-    print("Outer Face Filter Loading")
-else:
-    print("Please Select One of the Options")
-    exit(10)
-
-imageName = input("\nEnter Filter Image Name\n")
+imageName = filter_query()
 
 print("\nProgram Start")
 # Prepares Camera Feed
@@ -108,8 +120,7 @@ _, frame = capture.read()
 print("Camera Loaded")
 
 # Prepares select image
-imageFile = cv2.imread(imageName)
-print("Images Loaded")
+imageFile = read_image(imageName)
 
 # Generate Mask for subject
 rows, cols, _ = frame.shape
@@ -182,5 +193,21 @@ while True:
     key = cv2.waitKey(1)
 
     # Filter Switch
-#    if key == 27:
-#        typeVal
+    if key == 27:
+        exit(101)
+    elif key == 49:
+        typeVal = 1
+        imageName = filter_query()
+        imageFile = read_image(imageName)
+    elif key == 50:
+        typeVal = 2
+        imageName = filter_query()
+        imageFile = read_image(imageName)
+    elif key == 51:
+        typeVal = 3
+        imageName = filter_query()
+        imageFile = read_image(imageName)
+    elif key == 52:
+        typeVal = 4
+        imageName = filter_query()
+        imageFile = read_image(imageName)
